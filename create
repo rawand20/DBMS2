@@ -1,0 +1,42 @@
+create or replace type Classroom_T as object 
+(bld_id varchar2(10),
+class_no varchar2(10),
+class_capacity varchar2(12)
+)
+/
+create table Classroom of Classroom_T 
+(bld_id not null,
+class_no not null,
+primary key(bld_id, class_no),
+foreign key(bld_id) references 
+build(bld_id))
+cluster build_cluster(bld_id);
+
+
+
+   create or replace type technician_t under Staff_T (
+   tech_title varchar2(10), tech_skills varchar2(10) );
+
+
+ CREATE TYPE BODY technician_t AS 
+    STATIC PROCEDURE insert_technician (
+    tech_title IN VARCHAR,
+    tech_skills IN VARCHAR2,
+    
+  ) IS
+    Begin     
+      
+      INSERT INTO technician VALUES
+     (tech_title , tech_skills );
+    END insert_technician;
+   
+    MEMBER PROCEDURE delete_technician IS
+     BEGIN 
+	   IN (SELECT REF(s) FROM Staff s 
+        WHERE s.tech_skills = SELF.tech_skills);
+       
+       DELETE FROM technician t 
+        WHERE t.tech_title = SELF.tech_title;
+     END delete_technician;
+	 insert INTO technician (tech_title,tech_skills)
+     value (new_tech_title,new_tech_skills,new_office_skills);
